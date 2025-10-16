@@ -1,8 +1,8 @@
 import {NavigationContainer} from "@react-navigation/native";
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
-import SearchScreen from "../Screens/SearchScreen";
-import InventoryScreen from "../Screens/InventoryScreen";
-import Header from "./Header";
+import {SearchScreen} from "../Screens/SearchScreen";
+import {InventoryScreen} from "../Screens/InventoryScreen";
+import {Header} from "./Header";
 import {MaterialIcons} from "@expo/vector-icons"
 import {StyleSheet} from "react-native";
 
@@ -48,4 +48,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default Router
+export {Router}
