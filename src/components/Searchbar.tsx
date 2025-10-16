@@ -12,12 +12,13 @@ const Searchbar: FC<SearchbarProps> = ({setPokemon}) => {
     const [searchValue, setSearchValue] = useState<string>("");
 
     const fetchPokemon = async () => {
-        try {
-            const searchedPokemon: Pokemon = await pokemonApi.getPokemonDataByName(searchValue)
-            setPokemon(searchedPokemon);
-        } catch (error) {
-            console.error(error);
-            setPokemon(null);
+        if (searchValue !== '') {
+            try {
+                const searchedPokemon: Pokemon = await pokemonApi.getPokemonDataByName(searchValue)
+                setPokemon(searchedPokemon);
+            } catch (error) {
+                setPokemon(null);
+            }
         }
     }
 
@@ -64,4 +65,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default Searchbar;
+export {Searchbar};

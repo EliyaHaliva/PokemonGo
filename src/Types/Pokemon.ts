@@ -1,6 +1,6 @@
 import {Ability} from "./Ability";
 
-export interface PokemonDtoIn {
+export interface Pokemon {
     name: string,
     sprites: {
         other: {
@@ -10,10 +10,9 @@ export interface PokemonDtoIn {
         },
     },
     abilities: Ability[],
-}
-
-export interface Pokemon {
-    name: string,
-    image: string,
-    abilities: Ability[],
+    types: {
+        type: {
+            name: string,
+        }
+    }[],
 }

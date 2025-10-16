@@ -1,5 +1,5 @@
 import axios from "axios";
-import {Pokemon, PokemonDtoIn} from "../Types/Pokemon";
+import {Pokemon} from "../Types/Pokemon";
 
 const milliSecondsToSeconds: number = 1000;
 
@@ -13,8 +13,6 @@ const api = axios.create({
 
 export const pokemonApi = {
     getPokemonDataByName: async (name: string): Promise<Pokemon> => {
-        const pokemonDtoIn: PokemonDtoIn = (await api.get<PokemonDtoIn>(`pokemon/${name}`)).data;
-
-        return {...pokemonDtoIn, image: pokemonDtoIn.sprites.other.dream_world.front_default};
+        return (await api.get<Pokemon>(`pokemon/${name}`)).data;
     }
 }
