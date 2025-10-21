@@ -1,8 +1,8 @@
 import {NavigationContainer} from "@react-navigation/native";
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
-import {SearchScreen} from "../Screens/SearchScreen";
-import {InventoryScreen} from "../Screens/InventoryScreen";
-import {Header} from "./Header";
+import {SearchScreen} from "../Screens/Search/SearchScreen";
+import {InventoryScreen} from "../Screens/Inventory/InventoryScreen";
+import {Header} from "../components/Header/Header";
 import {MaterialIcons} from "@expo/vector-icons"
 import {StyleSheet} from "react-native";
 
@@ -28,6 +28,8 @@ const Router = () => {
                     }
 
                     return <MaterialIcons name={iconName} size={30} color={color}/>
+                }, tabBarItemStyle: {
+                    borderTopWidth: 1,
                 },
                 headerShown: false,
                 tabBarActiveTintColor: '#000000',
