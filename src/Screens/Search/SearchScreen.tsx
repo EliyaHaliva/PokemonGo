@@ -9,9 +9,12 @@ import {styles} from "./Styles";
 import {PokemonState} from "../../redux/slices/Pokemon/pokemonSlice";
 import {Pokemon} from "../../types/Pokemon";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {NavigationProp, useNavigation} from "@react-navigation/native";
+import {routes, TabList} from "../../Router/routes";
 
 const SearchScreen: FC = () => {
     const pokemonState: PokemonState = useSelector((state: RootState) => state.pokemon);
+    const navigation = useNavigation<NavigationProp<TabList>>();
     const loadingGif = require('../../../assets/loading.gif');
 
     const addPokemon = async () => {
@@ -19,14 +22,19 @@ const SearchScreen: FC = () => {
         try {
             const index = (await AsyncStorage.getAllKeys()).length;
             if (Math.floor(Math.random() * (10 + 1)) > 5) {
-                await AsyncStorage.setItem(`${index + 1}`, JSON.stringify(pokemon));
+                await AsyncStorage.setItem(`${index + 1}`, JSON.stringify({
+                    date: new Date(),
+                    data: pokemon,
+                    nickname: pokemon.name,
+                    isFavorite: false,
+                }));
                 ToastAndroid.show(`${pokemon.name} Has been caught`, ToastAndroid.SHORT);
+                navigation.navigate(routes.InventoryScreen as keyof TabList);
             } else {
                 ToastAndroid.show(`${pokemon.name} Has run away`, ToastAndroid.SHORT);
             }
         } catch (error) {
-            console.log(error);
-            ToastAndroid.show(`Bad`, ToastAndroid.SHORT);
+            ToastAndroid.show(`Error occurred please try again`, ToastAndroid.SHORT);
         }
     };
 

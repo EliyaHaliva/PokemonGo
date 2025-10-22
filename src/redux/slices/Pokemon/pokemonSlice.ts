@@ -33,5 +33,4 @@ const pokemonSlice = createSlice({
     }
 })
 
-export const {clearState} = pokemonSlice.actions;
 export const pokemonReducer = pokemonSlice.reducer;

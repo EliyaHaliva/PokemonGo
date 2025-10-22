@@ -4,14 +4,10 @@ import {SearchScreen} from "../Screens/Search/SearchScreen";
 import {InventoryScreen} from "../Screens/Inventory/InventoryScreen";
 import {Header} from "../components/Header/Header";
 import {MaterialIcons} from "@expo/vector-icons"
-import {StyleSheet} from "react-native";
+import {routes} from "./routes";
+import {styles} from "./Styles";
 
 const Tab = createBottomTabNavigator();
-
-enum routes {
-    SearchScreen = "SearchScreen",
-    InventoryScreen = "InventoryScreen",
-}
 
 const Router = () => {
     return (
@@ -43,11 +39,5 @@ const Router = () => {
         </NavigationContainer>
     )
 }
-
-const styles = StyleSheet.create({
-    screen: {
-        backgroundColor: '#FFFFFF',
-    },
-});
 
 export {Router}
