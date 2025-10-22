@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import {Image, Pressable, Text, ToastAndroid, View} from "react-native";
+import {Image, Pressable, Text, View} from "react-native";
 import {Searchbar} from "../../components/Searchbar/Searchbar";
 import {SvgUri} from "react-native-svg";
 import {PokemonColorType} from "../../enums/PokemonColorType";
@@ -11,11 +11,11 @@ import {Pokemon} from "../../types/Pokemon";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {NavigationProp, useNavigation} from "@react-navigation/native";
 import {routes, TabList} from "../../Router/routes";
+import Toast from "react-native-toast-message";
 
 const SearchScreen: FC = () => {
     const pokemonState: PokemonState = useSelector((state: RootState) => state.pokemon);
     const navigation = useNavigation<NavigationProp<TabList>>();
-    const loadingGif = require('../../../assets/loading.gif');
 
     const addPokemon = async () => {
         const pokemon: Pokemon = pokemonState.data!;
@@ -28,24 +28,34 @@ const SearchScreen: FC = () => {
                     nickname: pokemon.name,
                     isFavorite: false,
                 }));
-                ToastAndroid.show(`${pokemon.name} Has been caught`, ToastAndroid.SHORT);
+                Toast.show({
+                    type: 'success',
+                    text1: `${pokemon.name} Has been caught`,
+                    position: 'bottom',
+                    visibilityTime: 2000,
+                });
                 navigation.navigate(routes.InventoryScreen as keyof TabList);
             } else {
-                ToastAndroid.show(`${pokemon.name} Has run away`, ToastAndroid.SHORT);
+                Toast.show({
+                    type: 'error',
+                    text1: `${pokemon.name} Has run away`,
+                    position: 'bottom',
+                    visibilityTime: 2000,
+                });
             }
         } catch (error) {
-            ToastAndroid.show(`Error occurred please try again`, ToastAndroid.SHORT);
+            Toast.show({
+                type: 'error',
+                text1: `Error occurred please try again`,
+                position: 'bottom',
+                visibilityTime: 2000,
+            });
         }
     };
 
     return (
         <View style={styles.screenContainer}>
             <Searchbar/>
-            {pokemonState.isLoading
-                && (
-                    <View>
-                        <Image style={styles.loader} source={loadingGif}/>
-                    </View>)}
             {pokemonState.data
                 && (
                     <>

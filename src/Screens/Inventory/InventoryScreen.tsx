@@ -1,19 +1,22 @@
 import React, {FC, useCallback, useState} from 'react';
-import {View} from "react-native";
+import {Animated, Image, Text, View} from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {useFocusEffect} from "@react-navigation/native";
 import {PokemonCaught} from "../../types/PokemonCaught";
 import {PokemonCard} from "../../components/PokemonCard/Index";
 import {styles} from "./Styles";
+import ScrollView = Animated.ScrollView;
+
 
 const InventoryScreen: FC = () => {
-    const [pokemons, setPokemons] = useState<PokemonCaught[]>([]);
+    const [pokemons, setPokemons] = useState<[string, PokemonCaught][]>([]);
+    const catchGif = require('../../../assets/catch.gif');
 
     const getPokemonsFromAsyncStorage = async () => {
         try {
             const keys = await AsyncStorage.getAllKeys();
             const storedPokemons = await AsyncStorage.multiGet(keys);
-            const parsedPokemons: PokemonCaught[] = storedPokemons.map(([_, value]) => JSON.parse(value!));
+            const parsedPokemons: [string, PokemonCaught][] = storedPokemons.map(([key, value]) => [key, JSON.parse(value!)]);
 
             setPokemons(parsedPokemons);
         } catch (error) {
@@ -27,11 +30,17 @@ const InventoryScreen: FC = () => {
         }, []));
 
     return (
-        <View style={styles.screenContainer}>
-            {pokemons.length && pokemons.map((pokemonCaught, index) => (
-                <PokemonCard pokemonCaught={pokemonCaught} key={index}/>
-            ))}
-        </View>
+        <ScrollView contentContainerStyle={styles.screenContainer}>
+            {pokemons.length ? pokemons.map(([key, pokemonCaught]) => (
+                    <PokemonCard key={key} storageKey={key} pokemonCaught={pokemonCaught}/>
+                )) :
+                <View>
+                    <Text style={styles.noPokemonsTitle}>אין ברשותך פוקימונים</Text>
+                    <View>
+                        <Image style={styles.catchGif} source={catchGif}/>
+                    </View>
+                </View>}
+        </ScrollView>
     );
 };
 

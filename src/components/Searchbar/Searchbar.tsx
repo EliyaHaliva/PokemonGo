@@ -5,15 +5,24 @@ import {useDispatch} from "react-redux";
 import {AppDispatch} from "../../redux/store/store";
 import {fetchPokemon} from "../../redux/slices/Pokemon/PokemonSliceService";
 import {styles} from "./Styles";
+import {clearState} from "../../redux/slices/Pokemon/pokemonSlice";
 
 const Searchbar: FC = () => {
     const [searchValue, setSearchValue] = useState<string>("");
     const dispatch = useDispatch<AppDispatch>();
 
     useEffect(() => {
-        if (searchValue != '') {
-            dispatch(fetchPokemon(searchValue));
-        }
+        const debouncedSearch = setTimeout(() => {
+            if (searchValue != '') {
+                dispatch(fetchPokemon(searchValue));
+            }
+        }, 500)
+
+
+        return () => {
+            dispatch(clearState())
+            clearTimeout(debouncedSearch);
+        };
     }, [searchValue]);
 
     return (

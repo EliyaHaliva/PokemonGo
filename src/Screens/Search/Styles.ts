@@ -53,10 +53,5 @@ export const styles = StyleSheet.create({
     pokeImage: {
         width: 40,
         height: 40,
-    },
-    loader: {
-        alignSelf: "center",
-        height: 200,
-        width: 200
     }
 });
