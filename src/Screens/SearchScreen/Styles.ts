@@ -4,10 +4,16 @@ export const styles = StyleSheet.create({
     screenContainer: {
         gap: 20,
     },
+    searchContainer: {
+        width: '100%',
+        height: 50,
+        marginTop: 30
+    },
     centeredFlex: {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        gap: 10
     },
     title: {
         alignSelf: "center",
@@ -54,9 +60,7 @@ export const styles = StyleSheet.create({
         width: 40,
         height: 40,
     },
-    loader: {
-        alignSelf: "center",
-        height: 200,
-        width: 200
+    countText: {
+        fontSize: 18,
     }
 });
