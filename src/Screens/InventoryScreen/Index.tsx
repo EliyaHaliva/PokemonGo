@@ -1,14 +1,14 @@
-import React, { FC, useCallback, useState } from "react";
-import { Animated, Image, Text, View } from "react-native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
-import { PokemonCaught } from "../../types/PokemonCaught";
+import React, { FC, useCallback, useState } from "react";
+import { Animated, Image, Text, View } from "react-native";
 import { PokemonCard } from "../../components/PokemonCard/Index";
-import { styles } from "./Styles";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Searchbar } from "../../components/Searchbar/Index";
+import { SortType } from "../../enums/SortType.enum";
+import { PokemonCaught } from "../../types/PokemonCaught";
 import { Sort } from "../../types/Sort";
-import { SortType } from "../../enums/SortType";
+import { styles } from "./Styles";
 import ScrollView = Animated.ScrollView;
 
 const getPokemonsFromAsyncStorage = async () => {
@@ -161,4 +161,4 @@ const InventoryScreen: FC = () => {
   );
 };
 
-export { InventoryScreen, getPokemonsFromAsyncStorage };
+export { getPokemonsFromAsyncStorage, InventoryScreen };

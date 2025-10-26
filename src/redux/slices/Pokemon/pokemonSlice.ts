@@ -1,39 +1,53 @@
-import {Pokemon} from "../../../types/Pokemon";
-import {fetchPokemon} from "./PokemonSliceService";
-import {createSlice} from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { Pokemon } from "../../../types/Pokemon";
+import { PokemonCaught } from "../../../types/PokemonCaught";
+import { fetchPokemon } from "./PokemonSliceService";
 
 export interface PokemonState {
-    data: Pokemon | null;
-    isLoading: boolean;
-    isError: boolean;
+    currentPokemon: Pokemon | null,
+    caughtPokemons: PokemonCaught[]
 }
 
-const initialState: PokemonState = {data: null, isLoading: false, isError: false};
+const initialState: PokemonState = {
+    currentPokemon: null, caughtPokemons: []
+};
 
 const pokemonSlice = createSlice({
     name: "pokemon",
     initialState,
     reducers: {
-        clearState: (state: PokemonState) => {
-            state.data = null;
-            state.isLoading = false;
-            state.isError = false;
+        clearCurrentPokemon: (state: PokemonState) => {
+            state.currentPokemon = null;
+        },
+        catchPokemon: (state: PokemonState) => {
+            const foundPokemon = state.caughtPokemons.find(pokemon => pokemon.data.name === state.currentPokemon?.name);
+
+            if(foundPokemon) {
+                foundPokemon.count += 1;
+            } else if (state.currentPokemon) {
+                state.caughtPokemons.push({
+                    date: new Date().toISOString(),
+                    data: state.currentPokemon,
+                    nickname: state.currentPokemon.name,
+                    isFavorite: false,
+                    count: 1
+                })
+            }
+        },
+        toogleFavorite: (state, action:PayloadAction<Pokemon>) => {
+            const foundPokemon = state.caughtPokemons.find(
+                pokemon => pokemon.data.name === action.payload.name);
+
+                if(foundPokemon) {
+                    foundPokemon.isFavorite = !foundPokemon.isFavorite;
+                }
         }
     }, extraReducers: (builder) => {
-        builder.addCase(fetchPokemon.pending, (state) => {
-            state.isLoading = true;
-            state.isError = false;
-        }).addCase(fetchPokemon.fulfilled, (state, action) => {
-            state.data = action.payload;
-            state.isLoading = false;
-            state.isError = false;
-        }).addCase(fetchPokemon.rejected, (state) => {
-            state.data = null;
-            state.isLoading = false;
-            state.isError = true;
-        });
+        builder.addCase(fetchPokemon.fulfilled, (state, action:PayloadAction<Pokemon>) => {
+            state.currentPokemon = action.payload
+        })
     }
 })
 
-export const {clearState} = pokemonSlice.actions;
+export const {clearCurrentPokemon, catchPokemon} = pokemonSlice.actions;
 export const pokemonReducer = pokemonSlice.reducer;

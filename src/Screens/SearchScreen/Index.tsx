@@ -1,116 +1,46 @@
-import React, { FC, useEffect, useState } from "react";
+import { useNavigation } from "@react-navigation/native";
+import React, { FC } from "react";
 import { Image, Pressable, Text, View } from "react-native";
-import { Searchbar } from "../../components/Searchbar/Index";
 import { SvgUri } from "react-native-svg";
-import { PokemonColorType } from "../../enums/PokemonColorType";
-import { useSelector } from "react-redux";
-import { RootState } from "../../redux/store/store";
+import { useDispatch, useSelector } from "react-redux";
+import { Searchbar } from "../../components/Searchbar/Index";
+import { PokemonColorType } from "../../enums/PokemonColorType.enum";
+import {
+  catchPokemon,
+  PokemonState,
+} from "../../redux/slices/Pokemon/pokemonSlice";
+import { AppDispatch, RootState } from "../../redux/store/store";
 import { styles } from "./Styles";
-import { PokemonState } from "../../redux/slices/Pokemon/pokemonSlice";
-import { Pokemon } from "../../types/Pokemon";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
-import { routes, TabList } from "../../Router/routes";
-import Toast from "react-native-toast-message";
-import { getPokemonsFromAsyncStorage } from "../InventoryScreen/Index";
 
 const SearchScreen: FC = () => {
   const pokemonState: PokemonState = useSelector(
     (state: RootState) => state.pokemon
   );
-  const navigation = useNavigation<NavigationProp<TabList>>();
-  const [pokemonCaughtCount, setPokemonCaughtCount] = useState(0);
-
-  const getPokemonCount = async (name: string) => {
-    try {
-      const pokemons = await getPokemonsFromAsyncStorage();
-
-      if (pokemons) {
-        let count = 0;
-
-        pokemons.map(([, pokemon]) => {
-          if (pokemon.data.name === name) {
-            count++;
-          }
-        });
-
-        setPokemonCaughtCount(count);
-      } else {
-        setPokemonCaughtCount(0);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    if (pokemonState.data) {
-      getPokemonCount(pokemonState.data.name);
-    }
-  }, [pokemonState]);
-
-  const addPokemon = async () => {
-    const pokemon: Pokemon = pokemonState.data!;
-
-    try {
-      const index = (await AsyncStorage.getAllKeys()).length;
-
-      if (Math.floor(Math.random() * (10 + 1)) > 5) {
-        await AsyncStorage.setItem(
-          `${index + 1}`,
-          JSON.stringify({
-            date: new Date(),
-            data: pokemon,
-            nickname: pokemon.name,
-            isFavorite: false,
-          })
-        );
-        Toast.show({
-          type: "success",
-          text1: `${pokemon.name} נתפס`,
-          position: "bottom",
-          visibilityTime: 2000,
-        });
-        navigation.navigate(routes.InventoryScreen as keyof TabList);
-      } else {
-        Toast.show({
-          type: "error",
-          text1: `${pokemon.name} הצליח לברוח`,
-          position: "bottom",
-          visibilityTime: 2000,
-        });
-      }
-    } catch (error) {
-      Toast.show({
-        type: "error",
-        text1: "אירעה תקלה אנא נסה שנית",
-        position: "bottom",
-        visibilityTime: 2000,
-      });
-    }
-  };
+  const dispatch = useDispatch<AppDispatch>();
+  const navigation = useNavigation();
 
   return (
     <View style={styles.screenContainer}>
       <View style={styles.searchContainer}>
         <Searchbar placeholder={"חיפוש פוקימון"} />
       </View>
-      {pokemonState.data && (
+      {pokemonState.currentPokemon && (
         <>
           <View style={[styles.imageContainer, styles.centeredFlex]}>
-            <Text style={styles.title}>{pokemonState?.data?.name}</Text>
+            <Text style={styles.title}>{pokemonState.currentPokemon.name}</Text>
             <SvgUri
               height={200}
               width={300}
               uri={
-                pokemonState?.data?.sprites?.other?.dream_world?.front_default
+                pokemonState?.currentPokemon?.sprites?.other?.dream_world
+                  ?.front_default
               }
             />
           </View>
           <View style={styles.describeContainer}>
             <Text style={styles.title}>סוג</Text>
             <View style={styles.directionRowContainer}>
-              {pokemonState?.data?.types.map((type, index) => (
+              {pokemonState?.currentPokemon?.types.map((type, index) => (
                 <View
                   key={index}
                   style={[
@@ -133,19 +63,21 @@ const SearchScreen: FC = () => {
             <Text style={styles.title}>יכולות</Text>
             <View style={styles.directionRowContainer}>
               <View style={[styles.roundedDetails, styles.centeredFlex]}>
-                {pokemonState?.data?.abilities.map((ability, index) => (
-                  <Text key={index} style={styles.detailsText}>
-                    {ability.ability.name}
-                    {index != 0 ? ", " : ""}
-                  </Text>
-                ))}
+                {pokemonState?.currentPokemon?.abilities.map(
+                  (ability, index) => (
+                    <Text key={index} style={styles.detailsText}>
+                      {ability.ability.name}
+                      {index != 0 ? ", " : ""}
+                    </Text>
+                  )
+                )}
               </View>
             </View>
           </View>
           <View style={[styles.describeContainer, styles.centeredFlex]}>
             <Pressable
               style={[styles.catchContainer, styles.centeredFlex]}
-              onPress={() => addPokemon()}
+              onPress={() => dispatch(catchPokemon())}
             >
               <Image
                 style={styles.pokeImage}
@@ -154,7 +86,11 @@ const SearchScreen: FC = () => {
               <Text style={styles.detailsText}>תפוס!</Text>
             </Pressable>
             <Text style={styles.countText}>
-              יש ברשותך פוקימון זה: {pokemonCaughtCount}
+              יש ברשותך פוקימון זה:{" "}
+              {pokemonState.caughtPokemons.find(
+                (pokemon) =>
+                  pokemon.data.name == pokemonState.currentPokemon?.name
+              )?.count || 0}
             </Text>
           </View>
         </>

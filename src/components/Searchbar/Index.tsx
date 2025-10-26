@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../redux/store/store";
 import { fetchPokemon } from "../../redux/slices/Pokemon/PokemonSliceService";
 import { styles } from "./Styles";
-import { clearState } from "../../redux/slices/Pokemon/pokemonSlice";
+import { clearCurrentPokemon } from "../../redux/slices/Pokemon/pokemonSlice";
 
 interface SearchBarProps {
   placeholder?: string;
@@ -27,7 +27,7 @@ const Searchbar: FC<SearchBarProps> = ({ onSearch, placeholder, delay }) => {
     }, delay || 500);
 
     return () => {
-      dispatch(clearState());
+      dispatch(clearCurrentPokemon());
       clearTimeout(debouncedSearch);
     };
   }, [searchValue]);
