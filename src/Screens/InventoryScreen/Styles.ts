@@ -8,6 +8,20 @@ export const styles = StyleSheet.create({
         paddingTop: 20,
         paddingBottom: 100,
     },
+    filterContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: "center",
+        gap: 5
+    },
+    searchContainer: {
+        width: '80%',
+        height: 50,
+    },
+    emptyBagContainer: {
+        marginBottom: 200
+    },
     catchGif: {
         width: 400,
         height: 400,

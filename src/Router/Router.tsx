@@ -1,8 +1,8 @@
 import {NavigationContainer} from "@react-navigation/native";
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
-import {SearchScreen} from "../Screens/Search/SearchScreen";
-import {InventoryScreen} from "../Screens/Inventory/InventoryScreen";
-import {Header} from "../components/Header/Header";
+import {SearchScreen} from "../Screens/SearchScreen/Index";
+import {InventoryScreen} from "../Screens/InventoryScreen/Index";
+import {Header} from "../components/Header/Index";
 import {MaterialIcons} from "@expo/vector-icons"
 import {routes} from "./routes";
 import {styles} from "./Styles";
@@ -24,8 +24,6 @@ const Router = () => {
                     }
 
                     return <MaterialIcons name={iconName} size={30} color={color}/>
-                }, tabBarItemStyle: {
-                    borderTopWidth: 1,
                 },
                 headerShown: false,
                 tabBarActiveTintColor: '#000000',
@@ -33,8 +31,17 @@ const Router = () => {
                 tabBarShowLabel: false,
                 sceneStyle: styles.screen
             })}>
-                <Tab.Screen name={routes.SearchScreen} component={SearchScreen}/>
-                <Tab.Screen name={routes.InventoryScreen} component={InventoryScreen}/>
+                <Tab.Screen name={routes.SearchScreen} component={SearchScreen} options={{
+                    tabBarItemStyle: {
+                        borderRightWidth: 1,
+                        borderTopWidth: 1
+                    }
+                }}/>
+                <Tab.Screen name={routes.InventoryScreen} component={InventoryScreen} options={{
+                    tabBarItemStyle: {
+                        borderTopWidth: 1
+                    }
+                }}/>
             </Tab.Navigator>
         </NavigationContainer>
     )

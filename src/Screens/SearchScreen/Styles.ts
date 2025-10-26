@@ -4,10 +4,16 @@ export const styles = StyleSheet.create({
     screenContainer: {
         gap: 20,
     },
+    searchContainer: {
+        width: '100%',
+        height: 50,
+        marginTop: 30
+    },
     centeredFlex: {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        gap: 10
     },
     title: {
         alignSelf: "center",
@@ -53,5 +59,8 @@ export const styles = StyleSheet.create({
     pokeImage: {
         width: 40,
         height: 40,
+    },
+    countText: {
+        fontSize: 18,
     }
 });
