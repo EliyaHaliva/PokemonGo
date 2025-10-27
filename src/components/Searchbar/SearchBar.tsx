@@ -1,19 +1,19 @@
+import { MaterialIcons } from "@expo/vector-icons";
 import { FC, useEffect, useState } from "react";
 import { TextInput, View } from "react-native";
-import { MaterialIcons } from "@expo/vector-icons";
 import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../redux/store/store";
-import { fetchPokemon } from "../../redux/slices/Pokemon/PokemonSliceService";
-import { styles } from "./Styles";
 import { clearCurrentPokemon } from "../../redux/slices/Pokemon/pokemonSlice";
+import { fetchPokemon } from "../../redux/slices/Pokemon/PokemonSliceService";
+import { AppDispatch } from "../../redux/store/store";
+import { styles } from "./Styles";
 
-interface SearchBarProps {
+interface Props {
   placeholder?: string;
   onSearch?: (query: string) => void;
   delay?: number;
 }
 
-const Searchbar: FC<SearchBarProps> = ({ onSearch, placeholder, delay }) => {
+const Searchbar: FC<Props> = ({ onSearch, placeholder, delay }) => {
   const [searchValue, setSearchValue] = useState<string>("");
   const dispatch = useDispatch<AppDispatch>();
 
