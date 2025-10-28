@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
     screenContainer: {
@@ -29,7 +29,6 @@ export const styles = StyleSheet.create({
         height: 100,
     },
     directionRowContainer: {
-        marginTop: 10,
         flexDirection: "row",
         justifyContent: "center",
         gap: 20,
@@ -46,6 +45,7 @@ export const styles = StyleSheet.create({
     detailsText: {
         fontSize: 25,
         color: "#FFFFFF",
+        
     },
     catchContainer: {
         flexDirection: "row",

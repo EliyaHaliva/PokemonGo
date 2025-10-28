@@ -1,4 +1,4 @@
-import { FontAwesome, Octicons } from "@expo/vector-icons";
+import { MaterialCommunityIcons, Octicons } from "@expo/vector-icons";
 import moment from "moment";
 import React, { FC, useState } from "react";
 import { Text, View } from "react-native";
@@ -37,8 +37,8 @@ const PokemonCard: FC<Props> = ({ pokemonCaught }) => {
           />
           <Text style={styles.nickname}>{pokemonCaught.nickname}</Text>
         </View>
-        <FontAwesome
-          name={pokemonCaught.isFavorite ? "heart" : "heart-o"}
+        <MaterialCommunityIcons
+          name={pokemonCaught.isFavorite ? "heart" : "heart-outline"}
           size={25}
           color={pokemonCaught.isFavorite ? "#FF0000" : "#000000"}
           onPress={() => dispatch(toggleFavorite(pokemonCaught))}
