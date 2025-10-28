@@ -16,13 +16,10 @@ import {
 import { useDispatch } from "react-redux";
 import { changeNickname } from "../../../../redux/slices/Pokemon/pokemonSlice";
 import { AppDispatch } from "../../../../redux/store/store";
+import { FormData } from "../../../../types/FormData";
 import { PokemonCaught } from "../../../../types/PokemonCaught";
 import { errorToast, successToast } from "../../../../utils/Toast";
 import { styles } from "./Styles";
-
-interface FormData {
-  nickname: string;
-}
 
 interface Props {
   pokemonCaught: PokemonCaught;

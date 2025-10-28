@@ -1,10 +1,10 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { Animated, Image, Text, View } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Searchbar } from "../../components/SearchBar/SearchBar";
 import { SortType } from "../../enums/SortType.enum";
-import { AppDispatch, RootState } from "../../redux/store/store";
+import { RootState } from "../../redux/store/store";
 import { PokemonCaught } from "../../types/PokemonCaught";
 import { Sort } from "../../types/Sort";
 import { PokemonCard } from "./Components/PokemonCard/PokemonCard";
@@ -17,8 +17,8 @@ const InventoryScreen: FC = () => {
   const pokemons: PokemonCaught[] = useSelector(
     (state: RootState) => state.pokemon.caughtPokemons
   );
-  const dispatch = useDispatch<AppDispatch>();
-  const [filteredPokemons, setFilteredPokemons] = useState<PokemonCaught[]>([]);
+  const [filteredPokemons, setFilteredPokemons] =
+    useState<PokemonCaught[]>(pokemons);
   const [sort, setSort] = useState<Sort>({
     date: true,
     lexical: true,
@@ -72,6 +72,10 @@ const InventoryScreen: FC = () => {
     }
   };
 
+  useEffect(() => {
+    setFilteredPokemons(pokemons);
+  }, [pokemons]);
+
   return (
     <>
       <View style={styles.filterContainer}>
@@ -104,8 +108,8 @@ const InventoryScreen: FC = () => {
         />
       </View>
       <ScrollView contentContainerStyle={styles.screenContainer}>
-        {pokemons.length
-          ? pokemons.map((pokemonCaught, index) => (
+        {filteredPokemons.length
+          ? filteredPokemons.map((pokemonCaught, index) => (
               <PokemonCard key={index} pokemonCaught={pokemonCaught} />
             ))
           : null}
