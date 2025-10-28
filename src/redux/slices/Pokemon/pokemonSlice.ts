@@ -1,36 +1,54 @@
-import {Pokemon} from "../../../types/Pokemon";
-import {fetchPokemon} from "./PokemonSliceService";
-import {createSlice} from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { Pokemon } from "../../../types/Pokemon";
+import { PokemonCaught } from "../../../types/PokemonCaught";
+import { fetchPokemon } from "./PokemonSliceService";
 
 export interface PokemonState {
-    data: Pokemon | null;
-    isLoading: boolean;
-    isError: boolean;
+    currentPokemon: Pokemon | null,
+    caughtPokemons: PokemonCaught[]
 }
 
-const initialState: PokemonState = {data: null, isLoading: false, isError: false};
+const initialState: PokemonState = {
+    currentPokemon: null, caughtPokemons: []
+};
 
 const pokemonSlice = createSlice({
     name: "pokemon",
     initialState,
     reducers: {
-        clearState: (state: PokemonState) => {
-            state.data = null;
+        clearCurrentPokemon: (state: PokemonState) => {
+            state.currentPokemon = null;
+        },
+        addPokemon: (state: PokemonState, action: PayloadAction<PokemonCaught>) => {
+            const foundPokemon = state.caughtPokemons.find(
+                (pokemon) => pokemon.data.name === action.payload.data.name);
+
+            foundPokemon ? foundPokemon.count++ : state.caughtPokemons.push(action.payload);
+        },
+        toggleFavorite: (state, action:PayloadAction<PokemonCaught>) => {
+            const foundPokemon = state.caughtPokemons.find(
+                pokemon => pokemon.data.name === action.payload.data.name);
+
+            if(foundPokemon) {
+                foundPokemon.isFavorite = !foundPokemon.isFavorite;
+            }
+        },
+        changeNickname: (state, action:PayloadAction<{pokemonCaught: PokemonCaught, nickname: string}>) => {
+            const {pokemonCaught, nickname} = action.payload;
+            
+            const foundPokemon = state.caughtPokemons.find(
+                pokemon => pokemon.data.name === pokemonCaught.data.name);
+
+            if(foundPokemon && foundPokemon.nickname !== nickname) {
+                foundPokemon.nickname = nickname;
+            }
         }
     }, extraReducers: (builder) => {
-        builder.addCase(fetchPokemon.pending, (state) => {
-            state.isLoading = true;
-            state.isError = false;
-        }).addCase(fetchPokemon.fulfilled, (state, action) => {
-            state.data = action.payload;
-            state.isLoading = false;
-            state.isError = false;
-        }).addCase(fetchPokemon.rejected, (state) => {
-            state.data = null;
-            state.isLoading = false;
-            state.isError = true;
-        });
+        builder.addCase(fetchPokemon.fulfilled, (state, action:PayloadAction<Pokemon>) => {
+            state.currentPokemon = action.payload
+        })
     }
 })
 
+export const {clearCurrentPokemon, addPokemon, toggleFavorite, changeNickname} = pokemonSlice.actions;
 export const pokemonReducer = pokemonSlice.reducer;

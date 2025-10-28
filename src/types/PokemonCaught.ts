@@ -1,8 +1,9 @@
-import {Pokemon} from "./Pokemon";
+import { Pokemon } from "./Pokemon";
 
 export interface PokemonCaught {
-    date: Date,
+    date: string,
     data: Pokemon,
     nickname: string,
     isFavorite: boolean,
+    count: number
 }

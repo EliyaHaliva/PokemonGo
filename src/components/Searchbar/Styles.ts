@@ -3,7 +3,8 @@ import {StyleSheet} from "react-native";
 export const styles = StyleSheet.create({
     searchWrapper: {
         alignItems: 'center',
-        marginTop: 30
+        width: '100%',
+        height: '100%',
     },
     searchContainer: {
         flexDirection: 'row-reverse',
