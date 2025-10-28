@@ -19,28 +19,29 @@ const pokemonSlice = createSlice({
         clearCurrentPokemon: (state: PokemonState) => {
             state.currentPokemon = null;
         },
-        catchPokemon: (state: PokemonState) => {
-            const foundPokemon = state.caughtPokemons.find(pokemon => pokemon.data.name === state.currentPokemon?.name);
+        addPokemon: (state: PokemonState, action: PayloadAction<PokemonCaught>) => {
+            const foundPokemon = state.caughtPokemons.find(
+                (pokemon) => pokemon.data.name === action.payload.data.name);
+
+            foundPokemon ? foundPokemon.count++ : state.caughtPokemons.push(action.payload);
+        },
+        toggleFavorite: (state, action:PayloadAction<PokemonCaught>) => {
+            const foundPokemon = state.caughtPokemons.find(
+                pokemon => pokemon.data.name === action.payload.data.name);
 
             if(foundPokemon) {
-                foundPokemon.count += 1;
-            } else if (state.currentPokemon) {
-                state.caughtPokemons.push({
-                    date: new Date().toISOString(),
-                    data: state.currentPokemon,
-                    nickname: state.currentPokemon.name,
-                    isFavorite: false,
-                    count: 1
-                })
+                foundPokemon.isFavorite = !foundPokemon.isFavorite;
             }
         },
-        toogleFavorite: (state, action:PayloadAction<Pokemon>) => {
+        changeNickname: (state, action:PayloadAction<{pokemonCaught: PokemonCaught, nickname: string}>) => {
+            const {pokemonCaught, nickname} = action.payload;
+            
             const foundPokemon = state.caughtPokemons.find(
-                pokemon => pokemon.data.name === action.payload.name);
+                pokemon => pokemon.data.name === pokemonCaught.data.name);
 
-                if(foundPokemon) {
-                    foundPokemon.isFavorite = !foundPokemon.isFavorite;
-                }
+            if(foundPokemon && foundPokemon.nickname !== nickname) {
+                foundPokemon.nickname = nickname;
+            }
         }
     }, extraReducers: (builder) => {
         builder.addCase(fetchPokemon.fulfilled, (state, action:PayloadAction<Pokemon>) => {
@@ -49,5 +50,5 @@ const pokemonSlice = createSlice({
     }
 })
 
-export const {clearCurrentPokemon, catchPokemon} = pokemonSlice.actions;
+export const {clearCurrentPokemon, addPokemon, toggleFavorite, changeNickname} = pokemonSlice.actions;
 export const pokemonReducer = pokemonSlice.reducer;

@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
     screenContainer: {
@@ -13,10 +13,10 @@ export const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: "center",
-        gap: 5
+        gap: 2
     },
     searchContainer: {
-        width: '80%',
+        width: '70%',
         height: 50,
     },
     emptyBagContainer: {
